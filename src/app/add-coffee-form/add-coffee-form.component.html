@@ -1,1 +1,75 @@
-<p>add-coffee-form works!</p>
+<div>
+	<h3 class="my-3">Add Coffee</h3>
+
+	<form class="form mx-2" [formGroup]="coffeeForm" (ngSubmit)="onSubmit()">
+		<div class="form-group">
+			<label for="brand">Brand:</label>
+			<input type="text" class="form-control" id="brand" aria-autocomplete="none" formControlName="brand">
+			<div *ngIf="brand?.invalid && (brand?.dirty || brand?.touched)" class="alert alert-danger">
+				<div *ngIf="brand?.hasError('required')">
+					Brand is required.
+				</div>
+				<div *ngIf="brand?.hasError('minlength')">
+					Brand must be at least 4 characters long.
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group row mt-4">
+			<label for="coffeeType" class="col-sm-2 form-control-label label-inline">Type:</label>
+			<div id="coffeeType" class="col-sm-10 div-inline">
+				<label class="radio-inline col-sm-3">
+					<input type="radio" class="form-check-input radio-inline" name="coffeeType" id="ground"
+						value="ground" required formControlName="coffeeType">
+					Ground
+				</label>
+				<label class="radio-inline col-sm-3">
+					<input type="radio" class="form-check-input radio-inline" name="coffeeType" id="beans" value="beans"
+						required formControlName="coffeeType"> Beans
+				</label>
+			</div>
+			<div *ngIf="coffeeType?.invalid && (coffeeType?.dirty || coffeeType?.touched)" class="alert alert-danger">
+				<div *ngIf="coffeeType?.hasError('required')">
+					Name is required.
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group mt-4">
+			<label class="col-sm-2 form-control-label label-inline">Roast type:</label>
+			<select class="form-select" aria-label="Large select example" formControlName="roastType">
+				<option value=""></option>
+				<option value="ligth">Ligth</option>
+				<option value="medium">Medium</option>
+				<option value="dark">Dark</option>
+			</select>
+			<div *ngIf="roastType?.invalid && (roastType?.dirty || roastType?.touched)" class="alert alert-danger">
+				<div *ngIf="roastType?.hasError('required')">
+					Roast type is required.
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group mt-4">
+			<label for="flavorNotes">Flavor notes:</label>
+			<textarea type="text" class="form-control" id="flavorNotes" formControlName="flavorNotes"></textarea>
+		</div>
+
+		<div class="form-group mt-4">
+			<label for="grid" class="form-label">Grind: {{coffeeForm.controls['grind'].value}}</label>
+			<input type="range" min="0" max="5" class="form-range" id="grind" formControlName="grind">
+		</div>
+
+		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+			<button class="btn btn-secondary me-md-2" type="reset">Clear</button>
+			<button class="btn btn-primary" type="submit" [disabled]="!coffeeForm.valid">
+				@if (loading) {
+				<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+				<span role="status"> Saving...</span>
+				} @else {
+				Save
+				}
+			</button>
+		</div>
+	</form>
+</div>
