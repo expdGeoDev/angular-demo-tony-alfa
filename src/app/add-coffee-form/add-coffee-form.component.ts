@@ -7,6 +7,9 @@ import {
 	Validators,
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { AlertService } from '../alert';
+import { CoffeeHttpService } from '../coffee-http.service';
+import { Coffee } from '../../data/coffee-data';
 @Component({
 	selector: 'app-add-coffee-form',
 	standalone: true,
@@ -15,36 +18,46 @@ import { NgIf } from '@angular/common';
 	styleUrl: './add-coffee-form.component.css',
 })
 export class AddCoffeeFormComponent {
-	toastLiveExample = document.getElementById('liveToast');
 	loading: boolean = false;
+	options = {
+		autoClose: true,
+		keepAfterRouteChange: false,
+	};
 
-	constructor(private formBuilder: FormBuilder) {}
+	constructor(
+		private formBuilder: FormBuilder,
+		public alertSvc: AlertService,
+		private coffeeSvc: CoffeeHttpService
+	) {}
 
 	coffeeForm: FormGroup = this.formBuilder.group({
 		brand: ['', Validators.required],
-		coffeeType: ['', Validators.required],
-		roastType: ['', Validators.required],
+		roast: ['', Validators.required],
+		groundOrBeans: ['', Validators.required],
+		grind: [0],
+		singleOrigin: [false],
 		flavorNotes: [''],
-		grind: ['0'],
 	});
 
 	get brand() {
 		return this.coffeeForm.get('brand');
 	}
 
-	get coffeeType() {
-		return this.coffeeForm.get('coffeeType');
+	get groundOrBeans() {
+		return this.coffeeForm.get('groundOrBeans');
 	}
 
-	get roastType() {
-		return this.coffeeForm.get('roastType');
+	get roast() {
+		return this.coffeeForm.get('roast');
 	}
 
-	async onSubmit() {
+	async onSubmit(coffee: Coffee) {
 		this.loading = true;
 		await new Promise((f) => setTimeout(f, 1000));
 		this.loading = false;
-		console.log(this.coffeeForm.value);
+		console.log(coffee);
+		this.coffeeSvc.saveCoffee(coffee);
 		this.coffeeForm.reset();
+		this.alertSvc.success('Coffee saved!', this.options);
 	}
 }

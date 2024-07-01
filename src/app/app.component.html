@@ -9,16 +9,14 @@
 		<div class="col-3">
 			<ul class="list-unstyled">
 				<li *ngFor="let route of routerStates">
-					<a
-						[uiSref]="route.name"
-						uiSrefActive="active"
-					>
+					<a [uiSref]="route.name" uiSrefActive="active">
 						{{ route.label }}
 					</a>
 				</li>
 			</ul>
 		</div>
 		<div class="col">
+			<app-alert></app-alert>
 			<ui-view></ui-view>
 		</div>
 	</div>
